@@ -18,7 +18,7 @@ class NewsLetterPresentation:
 
     @router.get("/subscribeable", status_code=200)
     async def get_subscribeable_newsletters(
-        request: Request, Authorization=Header(None)
+        request: Request, cursor: int, Authorization=Header(None)
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
@@ -29,7 +29,7 @@ class NewsLetterPresentation:
 
     @router.get("/subscribed", status_code=200)
     async def get_subscribed_newsletters(
-        request: Request, in_mail: bool = False, Authorization=Header(None)
+        request: Request, cursor: int, in_mail: bool = False, Authorization=Header(None)
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)

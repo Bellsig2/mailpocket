@@ -31,17 +31,6 @@ class NewsLetterService:
         self.user_repository.DeleteUserNewslettersMapping(user).run()
         self.user_repository.CreateUserNewslettersMapping(user, newsletter_ids).run()
 
-    def get_subscribe_newsletters(self, user_id):
-        newsletter_list = list()
-        user = self.user_repository.ReadByID(user_id).run()
-        newsletters = self.newsletter_repository.LoadSubscribeNewsLettersByUser(
-            user
-        ).run()
-        if newsletters:
-            for newsletter in newsletters:
-                newsletter_list.append(NewsLetterlDTO(newsletter))
-        return newsletter_list
-
     def get_subscribeable_newsletters(self, user_id):
         newsletter_list = list()
         user = self.user_repository.ReadByID(user_id).run()

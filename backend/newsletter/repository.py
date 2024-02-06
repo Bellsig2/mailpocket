@@ -1,14 +1,7 @@
-import json
+from sqlalchemy import func
 
-from backend.channel.domain import Channel
 from backend.common.database.connector import MysqlCRUDTemplate
-from backend.common.database.model import (
-    ChannelModel,
-    MailModel,
-    NewsLetterModel,
-    SubscribeModel,
-    UserModel,
-)
+from backend.common.database.model import MailModel, NewsLetterModel, SubscribeModel
 from backend.common.exceptions import UnknownFromEamilException
 from backend.mail.domain import Mail
 from backend.newsletter.domain import NewsLetter
@@ -141,8 +134,18 @@ class NewsLetterRepository:
             newsletter_ids = [
                 subscribe_model[0] for subscribe_model in subscribe_models
             ]
+            # newsletter_models = (
+            #     self.session.query(NewsLetterModel)
+            #     .filter(NewsLetterModel.id.not_in(newsletter_ids))
+            #     .all()
+            # )
             newsletter_models = (
                 self.session.query(NewsLetterModel)
+                .join(
+                    SubscribeModel, NewsLetterModel.id == SubscribeModel.newsletter_id
+                )
+                .group_by(NewsLetterModel.id)
+                .order_by(func.count(SubscribeModel.newsletter_id).desc())
                 .filter(NewsLetterModel.id.not_in(newsletter_ids))
                 .all()
             )
@@ -187,8 +190,18 @@ class NewsLetterRepository:
             newsletter_ids = [
                 subscribe_model[0] for subscribe_model in subscribe_models
             ]
+            # newsletter_models = (
+            #     self.session.query(NewsLetterModel)
+            #     .filter(NewsLetterModel.id.in_(newsletter_ids))
+            #     .all()
+            # )
             newsletter_models = (
                 self.session.query(NewsLetterModel)
+                .join(
+                    SubscribeModel, NewsLetterModel.id == SubscribeModel.newsletter_id
+                )
+                .group_by(NewsLetterModel.id)
+                .order_by(func.count(SubscribeModel.newsletter_id).desc())
                 .filter(NewsLetterModel.id.in_(newsletter_ids))
                 .all()
             )
