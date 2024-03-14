@@ -19,7 +19,9 @@ jobs:
       - name: Check Node v
         run: node -v
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: |
+          cd frontend
+          yarn install --frozen-lockfile
       - name: Build
         run: yarn build
       - name: Deploy
