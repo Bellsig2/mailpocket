@@ -19,7 +19,7 @@ jobs:
       - name: Check Node v
         run: node -v
       - name: Install dependencies
-        run: yarn
+        run: yarn install
       - name: Generate build
         run: yarn build
       - name: Deploy
