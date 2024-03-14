@@ -23,7 +23,9 @@ jobs:
           cd frontend
           yarn install --frozen-lockfile
       - name: Build
-        run: yarn build
+        run: |
+          cd frontend
+          yarn build
       - name: Deploy
         env:
           AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
